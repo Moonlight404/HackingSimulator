@@ -47,6 +47,11 @@ var sair = false
 
 var commandSend = "";
 
+var allIp = []
+var ips = []
+
+var procurandoSenha = false
+
 const commands = [
     {"command": "help", "function": 
     function help(){
@@ -186,10 +191,60 @@ const commands = [
     {"command": "logout", 
     "function": function logout(){
         logado = false
-    }}
+    }},
+    {"command": "search-ip",
+    "function": function createIp(){
+        var b = commandSend.replace("search-ip", "");
+        var total = parseInt(b.replace(" ", ""));
+        for(var i = 0; i < total; i++){
+            var ip = (Math.floor(Math.random() * 255) + 1)+"."+(Math.floor(Math.random() * 255) + 0)+"."+(Math.floor(Math.random() * 255) + 0)+"."+(Math.floor(Math.random() * 255) + 0);
+            var pwdChars = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz";
+            var pwdLen = 10;
+            var randPassword = Array(pwdLen).fill(pwdChars).map(function(x) { return x[Math.floor(Math.random() * x.length)] }).join('');
+            allIp.push({
+                "ip": ip,
+                "password":  randPassword
+            })
+            ips.push({
+                "ip": ip,
+                "password": null
+            })
+            console.log(`IP[${i + 1}]:Encontrei ${ip}`)
+        }
+    }
+    },
+    {"command": "show-ip",
+    "function": function showIp(){
+        console.table(ips)
+    }
+    },
+    {"command": "findpass-ip",
+    "function": function findPass(){
+        procurandoSenha = true
+        var b = commandSend.replace("findpass-ip", "");
+        var ip = b.replace(" ", "");
+        const found = allIp.find(element => element.ip === ip)
+        const id_f = allIp.indexOf(found)
+        const found_i = ips.find(element => element.ip === ip)
+        const id_i = ips.indexOf(found_i)
+        if(found){
+        console.log("Estamos procurando a senha desse IP")
+            setTimeout(() => {
+                ips[id_i].password = allIp[id_f].password
+                console.log(`A senha de ${ip} é ${allIp[id_f].password}`)
+                procurandoSenha = false
+                command()
+            }, 2000);
+        } else{
+            console.log(`Não temos ${ip} no nosso banco de dados`);
+        }
+    }
+    }
+
 ]
 
 function command(){ 
+    if(!procurandoSenha){
     if(logado){
     rl.question("\x1b[40m"+"\x1b[32m"+"@"+myaccount.user+"\x1b[0m"+"/"+"\x1b[2m"+file.folder+"/"+file.f +"$ ", (answer) => {
         // TODO: Log the answer in a database
@@ -234,6 +289,7 @@ function command(){
             }
         });
     }
+}
 }
 
 function ex(){
