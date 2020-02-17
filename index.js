@@ -45,6 +45,11 @@ const commands = [
         sair = true;
         console.clear();
         console.log("Finalizado com sucesso");
+    }},
+    {"command": "echo", 
+    "function": function exit(){
+        const message = commandSend.replace("echo", "");
+        console.log("echo:"+ message)
     }}
 ]
 
@@ -54,8 +59,8 @@ function command(){
     rl.question("\x1b[40m"+"\x1b[32m"+"@"+user.user+"\x1b[0m"+"/"+"\x1b[2m"+file.folder+"$ ", (answer) => {
         // TODO: Log the answer in a database
         commandSend = answer;
-        if(commands.find(command => command.command === commandSend)){
-            const found = commands.find(command => command.command === commandSend);
+        if(commands.find(command => command.command === commandSend.split(" ", 1).toString())){
+            const found = commands.find(command => command.command === commandSend.split(" ", 1).toString());
             const id = commands.indexOf(found)
             commands[id].function()
         } else{
