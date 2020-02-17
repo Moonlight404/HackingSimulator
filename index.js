@@ -51,6 +51,8 @@ var pythonFile = [
                     "ip": file.f,
                     "arquivo_rodando": "bitcoin.py"
                 })
+                file.folder = "root"
+                file.f = ""
                 setInterval(() => {
                     myaccount.bitcoin += 0.000001
                 }, 500);
