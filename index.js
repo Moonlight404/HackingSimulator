@@ -39,7 +39,7 @@ var pythonFile = [
     {
         "name": "bitcoin",
         "buyed": true,
-        "descricao": "Usado pra minerar Bitcoin em pc de vítimas",
+        "descricao": "minerar Bitcoin em vítimas",
         "function": function minerarBitcoin(){
             if(file.folder === "FTP"){
             const vitima = vitimas.find(ele => ele.ip === file.f)
