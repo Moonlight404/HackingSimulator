@@ -69,7 +69,7 @@ function command(){
         }
         console.log("\x1b[0m");
         if(!sair){
-        command();
+            command();
         }
     }); 
 }
