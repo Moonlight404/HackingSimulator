@@ -3,7 +3,6 @@ const rl = readline.createInterface({
   input: process.stdin,
   output: process.stdout
 });
-
 const block = (data) => {
     process.on('uncaughtException', function (err) {
         console.log('Caught exception: ' + err)
@@ -13,9 +12,7 @@ const block = (data) => {
         rl.pause()
     })
 }
-
 console.clear();
-
 var folder = [
     {"folder": "users", 
     "f" : [
@@ -29,11 +26,8 @@ var folder = [
     ]},
     
 ]
-
 var alterando = false;
-
 var logado = false;
-
 var myaccount = {
             "ip": "192.168.1.1",
             "user": "root",
@@ -41,17 +35,11 @@ var myaccount = {
             "admin": 0,
             "bitcoin": 0.000001}
 var file = {"folder": "root", "f": ""}
-
 var sair = false
-
-
 var commandSend = "";
-
 var allIp = []
 var ips = []
-
 var procurandoSenha = false
-
 const commands = [
     {"command": "help", "function": 
     function help(){
