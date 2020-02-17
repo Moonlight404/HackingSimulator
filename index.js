@@ -237,6 +237,8 @@ const commands = [
             }, 2000);
         } else{
             console.log(`Não temos ${ip} no nosso banco de dados`);
+            procurandoSenha = false
+            command()
         }
     }
     }
