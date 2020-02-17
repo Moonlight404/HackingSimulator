@@ -28,6 +28,8 @@ var user = {
             "admin": 0}
 var file = {"folder": "Root"}
 
+var sair = false
+
 const commands = [
     {"command": "cd", "function": 
     function explore(onde){
@@ -35,10 +37,18 @@ const commands = [
     }},
     {"command": "clear", 
     "function": function clear(){
-        console.log("teste")
         console.clear();
+    }},
+    {"command": "exit", 
+    "function": function exit(){
+        rl.close();
+        sair = true;
+        console.clear();
+        console.log("Finalizado com sucesso");
     }}
 ]
+
+
 
 var commandSend = "";
 
@@ -60,7 +70,9 @@ function command(){
             return false;
         }
         console.log("\x1b[0m");
+        if(!sair){
         command();
+        }
     }); 
 }
 
