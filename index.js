@@ -79,7 +79,25 @@ const commands = [
                         console.log("Senha incorreta")
                     }
                 } else{
-                    console.log("Senha incorreta")
+                    const found = allIp.find(e => e.ip === ip)
+                    const id = allIp.indexOf(found)
+                    if(found){
+					if(allIp[id].password === answer){
+                        console.log(`Você está conectando ${ip}, aguarde alguns segundos`);
+                        procurandoSenha = true
+                        setInterval(() => {
+                            rl.question("Tens certeza que queres conectar?\nPor sua conta e risco\n('y or n') ", (res) => {
+                                if(res === "y"){
+                                    console.log(`Connected in ${ip}`)
+                                    file.folder = "FTP"
+                                    file.f = ip
+                                }
+                            });
+                        }, 1000);
+					} else{
+						console.log("Senha incorreta")
+                    }
+                }
                 }
                 command()
             });
@@ -100,6 +118,7 @@ const commands = [
     }},
     {"command": "cd", "function": 
     function explore(){
+        if(!file.f === "FTP"){
         const b = commandSend.replace("cd", "");
         const f = b.replace(" ", "");
         const found = folder.find(element => element.folder === file.folder);
@@ -119,8 +138,8 @@ const commands = [
             else{
                 console.log(id_f)
             }
-            
         }
+    }
     }},
     {"command": "ls", "function": 
         function ls(){
