@@ -85,12 +85,19 @@ const commands = [
 					if(allIp[id].password === answer){
                         console.log(`Você está conectando ${ip}, aguarde alguns segundos`);
                         procurandoSenha = true
-                        setInterval(() => {
+                        setTimeout(() => {
                             rl.question("Tens certeza que queres conectar?\nPor sua conta e risco\n('y or n') ", (res) => {
+                                console.log(res)
                                 if(res === "y"){
                                     console.log(`Connected in ${ip}`)
+                                    procurandoSenha = false
                                     file.folder = "FTP"
                                     file.f = ip
+                                    command()
+                                } else{
+                                    console.log("Medroso haha")
+                                    procurandoSenha = false
+                                    command()
                                 }
                             });
                         }, 1000);
