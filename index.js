@@ -34,6 +34,34 @@ var myaccount = {
             "password": "root",
             "admin": 0,
             "bitcoin": 0.000001}
+
+var pythonFile = [
+    {
+        "name": "bitcoin",
+        "buyed": true,
+        "descricao": "Usado pra minerar Bitcoin em pc de vítimas",
+        "function": function minerarBitcoin(){
+            if(file.folder === "FTP"){
+            const vitima = vitimas.find(ele => ele.ip === file.f)
+            if(vitima){
+                console.log("Já tem minerador de bitcoin nessa vítima")
+            } else{
+                console.log("Vítima contaminada..")
+                this.vitimas.push({
+                    "ip": file.f,
+                    "arquivo_rodando": "bitcoin.py"
+                })
+
+            }
+        } else{
+            console.log("Não estais conectado a um IP")
+        } 
+        }
+    }
+]
+
+var vitimas = []
+        
 var file = {"folder": "root", "f": ""}
 var sair = false
 var commandSend = "";
@@ -258,7 +286,21 @@ const commands = [
             command()
         }
     }
-    }
+    },
+    {"command": "apps",
+    "function": function python(){
+        console.table(pythonFile)
+    }},
+    {"command": "python",
+    "function": function python(){
+        var b = commandSend.replace("function", "");
+        var arquivo = b.replace(" ", "");
+        const foundFilePy = pythonFile.find(e => e.name === arquivo)
+        if(foundFilePy){
+            foundFilePy.function()
+            command();
+        }
+    }}
 
 ]
 
