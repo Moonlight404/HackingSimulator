@@ -257,11 +257,14 @@ function command(){
             commands[id].function()
         } else{
             console.log(commandSend+": "+"\x1b[2m"+"não é um comando");
+			command();
         }
         if(commandSend !== ""){
             commandSend = "";
+			command();
         } else{
             commandSend = "";
+			command();
             return false;
         }
         if(!sair){
