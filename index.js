@@ -16,28 +16,160 @@ const block = (data) => {
 
 console.clear();
 
-const folder = [
-    {"folder": "Root"},
-    {"folder": "users"},
-    {"folder": "documents"}
+var folder = [
+    {"folder": "users", 
+    "f" : [
+        {"folder": "root"}
+    ]},
+    {"folder": "root",
+    "f" : [
+        {"folder": "videos", "f": []},
+        {"folder": "imagens", "f": []},
+        {"folder": "documents", "f": []}
+    ]},
+    
 ]
 
-var user = {
-            "user": "Root",
-            "password": "toor",
-            "admin": 0}
-var file = {"folder": "Root"}
+var alterando = false;
+
+var logado = false;
+
+var myaccount = {
+            "ip": "192.168.1.1",
+            "user": "root",
+            "password": "root",
+            "admin": 0,
+            "bitcoin": 0.000001}
+var file = {"folder": "root", "f": ""}
 
 var sair = false
 
+
+var commandSend = "";
+
 const commands = [
-    {"command": "cd", "function": 
-    function explore(onde){
-        console.log(onde)
+    {"command": "help", "function": 
+    function help(){
+        console.table(commands)
     }},
+    {"command": "crypto", "function": 
+    function crpto(){
+        console.log("  Minha conta")
+        console.table(myaccount)
+    }},
+    {"command": "connect", "function": 
+    function connect(){
+        const b = commandSend.replace("connect", "");
+        const ip = b.replace(" ", "");
+        console.log(`Conectando à ${ip}, aguarde`)
+        const sucess = true;
+        if(!sucess){
+            console.log("Ocorreu um erro ao conectar")
+        } else{
+            rl.question("O servidor precisa de uma senha: ", (answer) => {
+                if(ip === myaccount.ip){
+                    if(answer === myaccount.password){
+                        console.log("Você não pode fazer conexão consigo mesmo")
+                    } else{
+                        console.log("Senha incorreta")
+                    }
+                } else{
+                    console.log("Senha incorreta")
+                }
+                command()
+            });
+        }
+    }},
+    {"command": "su", "function": 
+    function su(){
+        const b = commandSend.replace("su", "");
+        const user = b.replace(" ", "");
+        if(user === myaccount.user){
+            const found = {"Mensagem": `Agora ${user} é Administrador`};
+            myaccount.admin = 1;
+            console.table(found);
+        } else{
+            const found = {"Mensagem": "Não encontramos esse usuario"};
+            console.table(found);
+        }
+    }},
+    {"command": "cd", "function": 
+    function explore(){
+        const b = commandSend.replace("cd", "");
+        const f = b.replace(" ", "");
+        const found = folder.find(element => element.folder === file.folder);
+        const id = folder.indexOf(found);
+        const found_f = folder[id].f.find(element => element.folder === f);
+        const id_f = folder[id].f.indexOf(found_f); 
+        const id_b = folder.indexOf(found); 
+        if(id >= 1){
+            if(f === ".."){
+            file.folder = folder[id - 1].folder
+            file.f = "";
+            }
+        } else{
+            if(folder[id + 1]){
+                file.folder = folder[id_b + 1].folder;
+            } 
+            else{
+                console.log(id_f)
+            }
+            
+        }
+    }},
+    {"command": "ls", "function": 
+        function ls(){
+            const found = folder.find(element => element.folder === file.folder);
+            const id = folder.indexOf(found);
+            const found_f = folder[id].f.find(element => element.folder === file.f);
+            const id_f = folder[id].f.indexOf(found);
+            if(id >= 1){
+                console.log(`.${folder[id - 1].folder}`)
+            }
+            if(!found_f){
+            for(let i = 0; i < folder[id].f.length; i++){
+                console.log(folder[id].f[i].folder)
+            }
+            }
+        }
+    },
     {"command": "clear", 
     "function": function clear(){
         console.clear();
+    }},
+    {"command": "name", 
+    "function": function name(){
+        const b = commandSend.replace("name", "");
+        const name = b.replace(" ", "");
+        rl.question("Insira sua senha: ", (answer) => {
+            if(myaccount.password === answer){
+                console.log("Você alterou seu nome! :D")
+                myaccount.user = name
+                alterando = false
+                command();
+            } else{
+                console.log("Senha invalida!")
+                alterando = false
+                command();
+            }
+        });
+    }},
+    {"command": "pass", 
+    "function": function pass(){
+        const b = commandSend.replace("pass", "");
+        const password = b.replace(" ", "");
+        rl.question("Insira sua senha atual: ", (answer) => {
+            if(myaccount.password === answer){
+                console.log("Você alterou sua senha! :D")
+                myaccount.password = password
+                alterando = false
+                command();
+            } else{
+                console.log("Senha invalida!")
+                alterando = false
+                command();
+            }
+        });
     }},
     {"command": "exit", 
     "function": function exit(){
@@ -50,13 +182,16 @@ const commands = [
     "function": function exit(){
         const message = commandSend.replace("echo", "");
         console.log("echo:"+ message)
+    }},
+    {"command": "logout", 
+    "function": function logout(){
+        logado = false
     }}
 ]
 
-var commandSend = "";
-
 function command(){ 
-    rl.question("\x1b[40m"+"\x1b[32m"+"@"+user.user+"\x1b[0m"+"/"+"\x1b[2m"+file.folder+"$ ", (answer) => {
+    if(logado){
+    rl.question("\x1b[40m"+"\x1b[32m"+"@"+myaccount.user+"\x1b[0m"+"/"+"\x1b[2m"+file.folder+"/"+file.f +"$ ", (answer) => {
         // TODO: Log the answer in a database
         commandSend = answer;
         if(commands.find(command => command.command === commandSend.split(" ", 1).toString())){
@@ -72,11 +207,33 @@ function command(){
             commandSend = "";
             return false;
         }
-        console.log("\x1b[0m");
         if(!sair){
             command();
         }
     }); 
+    } else{
+        console.log(`Conectando à ${myaccount.ip}`)
+        var minhaSenha = "";
+        for(var i = myaccount.user.length - 1; i >= 0; i--){
+            minhaSenha += myaccount.user[i]
+        }
+        rl.question(`\x1b[0mOlá ${myaccount.user}, insira sua senha para continuar: `, (answer) => {
+            if(minhaSenha === answer){
+                console.log("Legal, você passou no primeiro teste")
+                logado = true
+                setTimeout(() => {
+                    console.clear()
+                    command();
+                }, 1500);
+            } else{
+                console.log("Senha invalida..")
+                setTimeout(() => {
+                    console.clear()
+                    command();
+                }, 1000);
+            }
+        });
+    }
 }
 
 function ex(){
