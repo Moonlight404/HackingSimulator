@@ -149,7 +149,7 @@ const commands = [
     }},
     {"command": "ls", "function": 
         function ls(){
-            if(file.folder !== "ftp"){
+            if(file.folder !== "FTP"){
             const found = folder.find(element => element.folder === file.folder);
             const id = folder.indexOf(found);
             const found_f = folder[id].f.find(element => element.folder === file.f);
