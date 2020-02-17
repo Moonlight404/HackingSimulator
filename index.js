@@ -86,6 +86,7 @@ const commands = [
     function connect(){
         const b = commandSend.replace("connect", "");
         const ip = b.replace(" ", "");
+		if(ips.find(i => i.ip === ip)){
         console.log(`Conectando à ${ip}, aguarde`)
         const sucess = true;
         if(!sucess){
@@ -127,7 +128,10 @@ const commands = [
                 }
                 command()
             });
-        }
+		}
+        } else{
+			console.log("Este IP não está registrado no nossa database");
+		}
     }},
     {"command": "su", "function": 
     function su(){
