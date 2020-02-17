@@ -149,6 +149,7 @@ const commands = [
     }},
     {"command": "ls", "function": 
         function ls(){
+            if(file.folder !== "ftp"){
             const found = folder.find(element => element.folder === file.folder);
             const id = folder.indexOf(found);
             const found_f = folder[id].f.find(element => element.folder === file.f);
@@ -160,6 +161,9 @@ const commands = [
             for(let i = 0; i < folder[id].f.length; i++){
                 console.log(folder[id].f[i].folder)
             }
+            }
+            } else{
+                console.log(`Você está conectado à ${file.f}`)
             }
         }
     },
