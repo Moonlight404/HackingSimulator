@@ -87,7 +87,6 @@ const commands = [
                         procurandoSenha = true
                         setTimeout(() => {
                             rl.question("Tens certeza que queres conectar?\nPor sua conta e risco\n('y or n') ", (res) => {
-                                console.log(res)
                                 if(res === "y"){
                                     console.log(`Connected in ${ip}`)
                                     procurandoSenha = false
