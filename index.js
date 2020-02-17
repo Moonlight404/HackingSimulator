@@ -55,7 +55,7 @@ var pythonFile = [
                 file.f = ""
                 setInterval(() => {
                     myaccount.bitcoin += 0.000001
-                }, 500);
+                }, 5400);
             }
         } else{
             console.log("Não estais conectado a um IP")
