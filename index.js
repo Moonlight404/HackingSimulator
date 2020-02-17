@@ -296,7 +296,7 @@ const commands = [
         console.table(pythonFile)
     }},
     {"command": "python",
-    "function": function python(){
+    "function": function vitimas(){
         var b = commandSend.replace("python", "");
         var arquivo = b.replace(" ", "");
         const foundFilePy = pythonFile.find(e => e.name === arquivo)
