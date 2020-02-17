@@ -47,11 +47,13 @@ var pythonFile = [
                 console.log("Já tem minerador de bitcoin nessa vítima")
             } else{
                 console.log("Vítima contaminada..")
-                this.vitimas.push({
+                vitimas.push({
                     "ip": file.f,
                     "arquivo_rodando": "bitcoin.py"
                 })
-
+                setInterval(() => {
+                    myaccount.bitcoin += 0.000001
+                }, 500);
             }
         } else{
             console.log("Não estais conectado a um IP")
@@ -288,18 +290,22 @@ const commands = [
     }
     },
     {"command": "apps",
-    "function": function python(){
+    "function": function apps(){
         console.table(pythonFile)
     }},
     {"command": "python",
     "function": function python(){
-        var b = commandSend.replace("function", "");
+        var b = commandSend.replace("python", "");
         var arquivo = b.replace(" ", "");
         const foundFilePy = pythonFile.find(e => e.name === arquivo)
         if(foundFilePy){
             foundFilePy.function()
             command();
         }
+    }},
+    {"command": "vitimas",
+    "function": function python(){
+        console.table(vitimas)
     }}
 
 ]
