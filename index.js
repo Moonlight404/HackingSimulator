@@ -48,8 +48,6 @@ const commands = [
     }}
 ]
 
-
-
 var commandSend = "";
 
 function command(){ 
@@ -76,8 +74,17 @@ function command(){
     }); 
 }
 
+function ex(){
+    process.on('exit', function(code) { 
+    sair = true;
+    console.clear();
+    console.log("Finalizado com sucesso"); 
+});
+}
+
 function start(){
     command();
+    ex();
 }
 
 start();
