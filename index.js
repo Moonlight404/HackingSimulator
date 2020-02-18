@@ -149,23 +149,33 @@
         procurandoSenha = true
     	setTimeout(() => {
             if(myaccount.bitcoin >= 0.000010){
-						const bandeiras = ["Amex","VISA", "Mastercard"]
-						const qual = Math.floor(Math.random() * bandeiras.length) + 0
+			const bandeiras = ["Amex","VISA", "Mastercard"]
+			const qual = Math.floor(Math.random() * bandeiras.length) + 0
             const number = generator.GenCC(bandeiras[qual], 1).toString()
             const month = Math.floor(Math.random() * 12) + 1
             const year = Math.floor(Math.random() * 30) + 21
+            const sort = Math.floor(Math.random() * 5) + 0
+            var saldo = 0;
+            if(sort === 5){
+                saldo = Math.floor(Math.random() * 4000) + 21
+            } else if(sort === 4){
+                saldo = Math.floor(Math.random() * 400) + 21
+            } else if(sort <= 3){
+                saldo = Math.floor(Math.random() * 250) + 90
+            }
             creditcards.push({
                 "number": number,
                 "month": month,
-								"year": year,
-								"bandeira": bandeiras[qual]
+				"year": year,
+                "bandeira": bandeiras[qual],
+                "saldo": saldo
             })
 						console.log("Verifique seus cartões clonados")
 						myaccount.bitcoin -= 0.000010
 						movimentos.push({
 							"produto": "Credit Card",
 							"valor": 0.000010,
-							"moeda": "bitcoin"
+                            "moeda": "bitcoin"
 						})
             } else{
                 console.log("Você precisa de 0.000010 de bitcoin pra comprar")
@@ -173,7 +183,6 @@
             procurandoSenha = false
             command()
           }, 1200);
-		  
 	  }
   }
   ]
