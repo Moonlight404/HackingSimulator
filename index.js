@@ -1,9 +1,59 @@
   const readline = require('readline');
   const generator = require('creditcard-generator')
+  const fs = require('fs');
   const rl = readline.createInterface({
       input: process.stdin,
       output: process.stdout
   });
+
+
+	
+	function save(){
+		let myacc = myaccount
+		let mov = movimentos
+		let viti = vitimas
+		let cred = creditcards
+		let alli = allIp
+		let ip = ips
+		let saveGame = [
+					{"myaccount": myacc},
+					{"movimentos": mov},
+					{"vitimas": viti},
+					{"creditcards": cred},
+					{"allip": alli},
+					{"ip": ip}
+		]
+		let json = JSON.stringify(saveGame)
+		fs.writeFile("./save.json", JSON.stringify(json, null, 4), (err) => {
+			if (err) {
+					console.error(err);
+					return;
+			};
+	});
+	}
+
+	function game(){
+			save()
+	}
+
+	setInterval(() => {
+		game()
+	}, 500);
+
+	function load(){
+		let save = fs.readFileSync('./save.json');
+		let saveGame = JSON.parse(save)
+		let game = JSON.parse(saveGame)
+		if(game.length >= 6){
+		myaccount = game[0].myaccount
+		movimentos = game[1].movimentos
+		itimas = game[2].vitimas
+		creditcards = game[3].creditcards
+		allIp = game[4].allip
+		ips = game[5].ip
+		}
+	}
+
   const block = (data) => {
       process.on('uncaughtException', function(err) {
           console.log('Caught exception: ' + err)
@@ -482,4 +532,5 @@
       ex();
   }
 
-  start();
+	start();
+	load()
