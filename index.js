@@ -38,7 +38,7 @@
 
 	setInterval(() => {
 		game()
-	}, 500);
+	}, 1000);
 
 	function load(){
 		let save = fs.readFileSync('./save.json');
@@ -47,7 +47,7 @@
 		if(game.length >= 6){
 		myaccount = game[0].myaccount
 		movimentos = game[1].movimentos
-		itimas = game[2].vitimas
+		vitimas = game[2].vitimas
 		creditcards = game[3].creditcards
 		allIp = game[4].allip
 		ips = game[5].ip
@@ -94,6 +94,24 @@
       "bitcoin": 0.000001
   }
 
+	var minerar = null
+	var minerarCoin = 0.000000
+
+	function minerarBitcoin(){
+		setTimeout(() => {
+			for(var i = 0; i < vitimas.length; i++){
+				if(vitimas[i].arquivo_rodando === "bitcoin.py"){
+					var minerar = setInterval(() => {
+						myaccount.bitcoin += 0.000001
+						var n =	myaccount.bitcoin
+						var x = n.toFixed(7)
+						myaccount.bitcoin = parseFloat(x)
+				}, 5400);
+				}
+			}
+		}, 2000);
+	}
+
   var pythonFile = [
   {
       "name": "bitcoin",
@@ -115,7 +133,7 @@
                   var minerar = setInterval(() => {
 											myaccount.bitcoin += 0.000001
 											var n =	myaccount.bitcoin
-											var x = n.toFixed(6)
+											var x = n.toFixed(7)
 											myaccount.bitcoin = parseFloat(x)
                   }, 5400);
             }
@@ -529,3 +547,4 @@
 
 	start();
 	load()
+	minerarBitcoin()
