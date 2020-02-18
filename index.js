@@ -89,7 +89,7 @@
   var myaccount = {
       "ip": "192.168.1.1",
       "user": "root",
-      "password": "root",
+      "password": "toor",
       "admin": 0,
       "bitcoin": 0.000001
   }
@@ -494,13 +494,8 @@
                   }
               });
           } else {
-              console.log(`Conectando à ${myaccount.ip}`)
-              var minhaSenha = "";
-              for (var i = myaccount.user.length - 1; i >= 0; i--) {
-                  minhaSenha += myaccount.user[i]
-              }
               rl.question(`\x1b[0mOlá ${myaccount.user}, insira sua senha para continuar: `, (answer) => {
-                  if (minhaSenha === answer) {
+                  if (myaccount.password === answer) {
                       console.log("Legal, você passou no primeiro teste")
                       logado = true
                       setTimeout(() => {
