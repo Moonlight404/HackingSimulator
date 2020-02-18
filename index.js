@@ -6,8 +6,6 @@
       output: process.stdout
   });
 
-
-	
 	function save(){
 		let myacc = myaccount
 		let mov = movimentos
@@ -545,6 +543,6 @@
       ex();
   }
 
-	start();
 	load()
+	start();
 	minerarBitcoin()
