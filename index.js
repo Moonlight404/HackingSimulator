@@ -593,7 +593,9 @@
             "command": "vitimas",
             "function": function python() {
                             if(vitimas.length > 0){
+                                for(let i = 0; i < vitimas.length; i++){
                                 console.log(`${vitimas[i].ip} - Rodando => ${vitimas[i].arquivo_rodando}`)
+                                }
                             } else{
                                 console.log("Não tens nenhuma vitimas")
                             }
