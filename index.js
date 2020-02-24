@@ -12,14 +12,20 @@
 		let viti = vitimas
 		let cred = creditcards
 		let alli = allIp
-		let ip = ips
+        let ip = ips
+        let pc = myComputer
+
+      
 		let saveGame = [
 					{"myaccount": myacc},
 					{"movimentos": mov},
 					{"vitimas": viti},
 					{"creditcards": cred},
 					{"allip": alli},
-					{"ip": ip}
+                    {"ip": ip},
+                    {"ram": myComputer[0]},
+                    {"hd": myComputer[1]},
+                    {"internet": myComputer[2]}
 		]
 		let json = JSON.stringify(saveGame)
 		fs.writeFile("./save.json", JSON.stringify(json, null, 4), (err) => {
@@ -39,6 +45,7 @@
 	}, 1000);
 
 	function load(){
+        try {
 		let save = fs.readFileSync('./save.json');
 		let saveGame = JSON.parse(save)
 		let game = JSON.parse(saveGame)
@@ -48,9 +55,16 @@
 		vitimas = game[2].vitimas
 		creditcards = game[3].creditcards
 		allIp = game[4].allip
-		ips = game[5].ip
-		}
-	}
+        ips = game[5].ip
+        myComputer[0].ram = game[6].ram.ram
+        myComputer[1].hd = game[7].hd.hd
+        myComputer[2].internet = game[8].internet.internet
+        }
+        }
+        catch (error) {
+            save()
+        }
+    }
 
   const block = (data) => {
       process.on('uncaughtException', function(err) {
@@ -184,10 +198,78 @@
             command()
           }, 1200);
 	  }
+  },
+  {
+    "name": "store",
+    "buyed": true,
+    "descricao": "Store",
+    "function": function store(){
+        var compraID = 0
+        console.log("Bem vindo ao Store\nAqui você comprara componentes para seu computador")
+        console.table(stores)
+        console.log(`Escolha uma opção que queiras comprar`)
+        procurandoSenha = true
+        try {
+        rl.question("index: ", (answer) => {
+            const cards = commands.find(command => command.command === "creditcards")
+            compraID = answer
+            if(creditcards.length > 0){
+                procurandoSenha = false
+                console.table(cards.function())
+                rl.question("index do cartão: ", (card) => {
+                    if(card){
+                    try {
+                    const cc = creditcards[card]
+                    if(cc.saldo >= stores[compraID].price){
+                        creditcards[card].saldo -= stores[compraID].price
+                        console.log(`Você comprou ${stores[compraID].name}`)
+                        procurandoSenha = false
+                        myComputer[0].ram += 4
+                        movimentos.push({
+							"produto": `${stores[compraID].name} - Amazon`,
+							"valor": stores[compraID].price,
+                            "moeda": "dollar"
+						})
+                        command()
+                        
+                    } else{
+                        console.log("Este cartão não tem saldo suficiente")
+                        procurandoSenha = false
+                        command()
+                    }
+                    } catch (error) {
+                        console.log("Ocorreu algum erro")
+                        procurandoSenha = false
+                        command()
+                    }
+                    }
+                });
+            } else{
+                procurandoSenha = false
+                command()
+            }
+        });
+    } catch (error) {
+        console.log("Ocorreu algum erro")
+        procurandoSenha = false
+        command()
+    }
+
+    }
   }
   ]
 
   var vitimas = []
+  
+  const stores = [
+      {"name": "Memoria ram 4GB", "price": 100}
+  ]
+
+  var myComputer = [
+      {"ram": 2},
+      {"hd": 200},
+      {"internet": 5}
+]
 
   var file = {
       "folder": "root",
@@ -203,7 +285,9 @@
   const commands = [{
           "command": "help",
           "function": function help() {
-              console.table(commands)
+              for(let i = 0; i < commands.length; i++){
+                console.log(`${commands[i].command}`)
+             }
           }
       }, {
           "command": "crypto",
@@ -212,11 +296,19 @@
               console.table(myaccount)
           }
       },
+      {"command": "pc_info",
+        "function": function pc(){
+            console.log("Informações do seu PC\n")
+            console.log(`Memoria RAM:${myComputer[0].ram}GB\nHD: ${myComputer[1].hd}GB\nInternet:${myComputer[2].internet}GB`)
+        }
+        },
 	  {
           "command": "creditcards",
           "function": function crpto() {
 						if(creditcards.length > 0){
-							console.table(creditcards)
+							for(let i = 0; i < creditcards.length; i++){
+                                console.log(`Index:${creditcards.indexOf(creditcards[i])} => ${creditcards[i].number}|${creditcards[i].month}|${creditcards[i].year}|$${creditcards[i].saldo}`)
+                            }
 						} else{
 							console.log("Não tens nenhum cartão de crédito")
 						}
@@ -226,7 +318,9 @@
 				"command": "movimento",
 				"function": function movimento() {
 					if(movimentos.length > 0){
-						console.table(movimentos)
+						for(let i = 0; i < movimentos.length; i++){
+                            console.log(`Extrato:\n${movimentos[i].produto}:${movimentos[i].valor} => ${movimentos[i].moeda}`)
+                        }
 					} else{
 						console.log("Não fizesse nenhuma compra")
 					}
@@ -300,18 +394,18 @@
                         "Mensagem": `Agora ${user} é Administrador`
                     };
                     myaccount.admin = 1;
-                    console.table(found);
+                    console.log(found.Mensagem);
                     } else{
                         const found = {
                             "Mensagem": `O ${user} já é Administrador`
                         };
-                        console.table(found);
+                        console.log(found.Mensagem);
                     }
                 } else {
                     const found = {
                         "Mensagem": "Não encontramos esse usuario"
                     };
-                    console.table(found);
+                    console.log(found.Mensagem);
                 }
             }
         }, {
@@ -446,7 +540,9 @@
             "command": "show-ip",
             "function": function showIp() {
                             if(ips.length > 0){
-                                console.table(ips)
+                                for(var i = 0; i < ips.length; i++){
+                                    console.log(`IP:${ips[i].ip}| Password:${ips[i].password}`)
+                                }
                             } else{
                                 console.log("Não tens nenhum IP registrado")
                             }
@@ -478,7 +574,9 @@
         }, {
             "command": "apps",
             "function": function apps() {
-                console.table(pythonFile)
+                for(var i = 0; i < pythonFile.length; i++){
+                    console.log(`${pythonFile[i].name} -> ${pythonFile[i].descricao}`)
+                }
             }
         }, {
             "command": "python",
@@ -495,7 +593,7 @@
             "command": "vitimas",
             "function": function python() {
                             if(vitimas.length > 0){
-                                console.table(vitimas)
+                                console.log(`${vitimas[i].ip} - Rodando => ${vitimas[i].arquivo_rodando}`)
                             } else{
                                 console.log("Não tens nenhuma vitimas")
                             }
