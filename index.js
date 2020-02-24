@@ -49,7 +49,7 @@
 		let save = fs.readFileSync('./save.json');
 		let saveGame = JSON.parse(save)
 		let game = JSON.parse(saveGame)
-		if(game.length >= 6){
+		if(game.length >= 8){
 		myaccount = game[0].myaccount
 		movimentos = game[1].movimentos
 		vitimas = game[2].vitimas
